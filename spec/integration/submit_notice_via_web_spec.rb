@@ -9,6 +9,12 @@ end
 feature "notice submission" do
   include UserHelpers
 
+  scenario "non signed-in user cannot submit notices" do
+    visit "/notices/new?type=DMCA"
+    
+    expect(page).to have_content('Direct submission to Lumen is no longer available. Please submit notices directly to the owner of the website hosting the content.')
+  end
+
   scenario "submitting a notice with title" do
     submit_recent_notice("A title")
 
@@ -241,6 +247,8 @@ feature "notice submission" do
   end
 
   scenario "a form articulates its required fields correctly" do
+    sign_in( create(:user, :submitter) )
+
     visit "/notices/new?type=DMCA"
 
     within('form#new_notice') do
@@ -250,6 +258,8 @@ feature "notice submission" do
   end
 
   scenario "submitting a notice without required fields present" do
+    sign_in( create(:user, :submitter) )
+    
     visit "/notices/new?type=DMCA"
 
     click_on "Submit"

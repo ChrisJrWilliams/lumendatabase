@@ -4,8 +4,14 @@ require 'support/user_helpers'
 feature "typed notice submissions" do
   include UserHelpers
 
+  scenario "Non signed-in user cannot see new notice forms" do
+    visit '/notices/new'
+    
+    expect(page).to have_content('Direct submission to Lumen is no longer available. Please submit notices directly to the owner of the website hosting the content.')
+  end
+  
   scenario "User submits and views a Trademark notice" do
-    submission = NoticeSubmissionOnPage.new(Trademark)
+    submission = NoticeSubmissionOnPage.new(Trademark, create(:user, :submitter))
     submission.open_submission_form
 
     submission.fill_in_form_with({
@@ -41,7 +47,7 @@ feature "typed notice submissions" do
   end
 
   scenario "User submits and views a Defamation notice" do
-    submission = NoticeSubmissionOnPage.new(Defamation)
+    submission = NoticeSubmissionOnPage.new(Defamation, create(:user, :submitter))
     submission.open_submission_form
 
     submission.fill_in_form_with({
@@ -85,7 +91,7 @@ feature "typed notice submissions" do
   end
   
   scenario "User submits and views a Data Protection notice" do
-    submission = NoticeSubmissionOnPage.new(DataProtection)
+    submission = NoticeSubmissionOnPage.new(DataProtection, create(:user, :submitter))
     submission.open_submission_form
 
     submission.fill_in_form_with({
@@ -118,7 +124,7 @@ feature "typed notice submissions" do
   end
 
   scenario "User submits and views a CourtOrder notice" do
-    submission = NoticeSubmissionOnPage.new(CourtOrder)
+    submission = NoticeSubmissionOnPage.new(CourtOrder, create(:user, :submitter))
     submission.open_submission_form
 
     submission.fill_in_form_with({
@@ -162,7 +168,7 @@ feature "typed notice submissions" do
   end
 
   scenario "User submits and views a Law Enforcement Request notice" do
-    submission = NoticeSubmissionOnPage.new(LawEnforcementRequest)
+    submission = NoticeSubmissionOnPage.new(LawEnforcementRequest, create(:user, :submitter))
     submission.open_submission_form
 
     submission.fill_in_form_with({
@@ -222,7 +228,7 @@ feature "typed notice submissions" do
   end
 
   scenario "User submits and views a PrivateInformation notice" do
-    submission = NoticeSubmissionOnPage.new(PrivateInformation)
+    submission = NoticeSubmissionOnPage.new(PrivateInformation, create(:user, :submitter))
     submission.open_submission_form
 
     submission.fill_in_form_with({
@@ -267,7 +273,7 @@ feature "typed notice submissions" do
   end
 
   scenario "User submits and views an Other notice" do
-    submission = NoticeSubmissionOnPage.new(Other)
+    submission = NoticeSubmissionOnPage.new(Other, create(:user, :submitter))
     submission.open_submission_form
 
     submission.fill_in_form_with({
@@ -315,7 +321,7 @@ feature "typed notice submissions" do
   end
 
   scenario "Entities can have different default types depending on role" do
-    submission = NoticeSubmissionOnPage.new(CourtOrder)
+    submission = NoticeSubmissionOnPage.new(CourtOrder, create(:user, :submitter))
     submission.open_submission_form
 
     submission.within_entity_with_role('issuing_court') do
