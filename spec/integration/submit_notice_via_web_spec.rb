@@ -198,11 +198,15 @@ feature "notice submission" do
   end
 
   scenario "submitting a notice with works" do
+    login
+
     submit_recent_notice do
       fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
       fill_in 'Description', with: 'A series of videos and still images'
       fill_in 'Infringing URL', with: "http://example.com/infringing_url1"
     end
+
+    logout
 
     open_recent_notice
 
@@ -259,7 +263,7 @@ feature "notice submission" do
 
   scenario "submitting a notice without required fields present" do
     sign_in( create(:user, :submitter) )
-    
+
     visit "/notices/new?type=DMCA"
 
     click_on "Submit"
